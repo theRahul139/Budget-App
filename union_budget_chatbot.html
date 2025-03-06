@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union Budget 2025 Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .chat-body {
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        .chat-footer button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-footer button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 15px;
+        }
+        .message.user {
+            text-align: right;
+        }
+        .message.bot {
+            text-align: left;
+        }
+        .message p {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .message.user p {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .message.bot p {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Union Budget 2025 Chatbot</div>
+        <div class="chat-body" id="chat-body">
+            <div class="message bot">
+                <p>Hello! I'm your Union Budget 2025 assistant. How can I help you today?</p>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="user-input" placeholder="Type your question here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Predefined questions and answers
+        const qaPairs = {
+            "what are the main themes of budget 2025-26": "The budget focuses on four key engines of growth: Agriculture, MSMEs, Investment, and Exports, with Reforms as the Fuel and Inclusivity as the guiding spirit to achieve Viksit Bharat.",
+            "what is the prime minister dhan-dhaanya krishi yojana": "It is a program covering 100 low-productivity agricultural districts to improve crop diversification, irrigation, post-harvest storage, and credit availability, benefiting 1.7 crore farmers.",
+            "what support is provided for msmes in budget 2025": "MSMEs will receive enhanced credit availability, higher classification limits, guaranteed loans up to ₹10 crore, and a new ₹10,000 crore Fund of Funds for startups.",
+            "what is the new income tax exemption limit": "Under the new tax regime, individuals earning up to ₹12 lakh will not have to pay income tax. Salaried taxpayers get an additional ₹75,000 standard deduction, making the exemption ₹12.75 lakh.",
+            "what tax slab changes have been made for individuals": "The revised tax slabs are: 0-4 lakh (Nil), 4-8 lakh (5%), 8-12 lakh (10%), 12-16 lakh (15%), 16-20 lakh (20%), 20-24 lakh (25%), above 24 lakh (30%).",
+            "what are the new initiatives for rural development": "The 'Rural Prosperity and Resilience' program will focus on women, youth, farmers, and landless families by promoting skilling, employment, and financial independence.",
+            "what measures have been taken for infrastructure development": "A ₹1.5 lakh crore interest-free loan is allocated for states' capital expenditure, and Greenfield airports in Bihar will be developed.",
+            "what tax benefits have been provided for startups": "Startups can now avail tax benefits if incorporated before April 1, 2030, and the government has allocated a ₹10,000 crore Fund of Funds to support startup growth.",
+            "what is the new deep tech fund of funds": "A Deep Tech Fund of Funds will be launched to support next-generation tech startups, particularly in AI, biotechnology, and advanced manufacturing.",
+            "what is bharattradenet": "BharatTradeNet (BTN) is a new digital public infrastructure for trade documentation and financing solutions, aligning with international trade practices.",
+            "how has the government promoted tourism": "The budget includes developing 50 tourist sites via a challenge mode, with a special focus on Buddhist heritage, medical tourism, and spiritual sites.",
+            "what is the fiscal deficit target for 2025-26": "The fiscal deficit is estimated at 4.4% of GDP.",
+            "what are the major reforms in indirect taxes": "The budget aims to simplify customs tariffs, provide duty exemptions on life-saving drugs, and promote domestic manufacturing through reduced import duties.",
+            "what is the new initiative for nuclear energy": "A Nuclear Energy Mission will invest ₹20,000 crore in Small Modular Reactors (SMRs), with a goal of developing 100 GW of nuclear energy by 2047.",
+            "what benefits are given to gig workers": "Gig workers will be registered on the e-Shram portal, provided with identity cards, and included under PM Jan Arogya Yojana for health benefits, benefiting 1 crore workers.",
+            "what incentives are being given for the toy industry": "A Toy Industry Support Scheme will promote cluster development, skill training, and sustainable toy production to make India a global toy hub.",
+            "what is the revised credit limit under kisan credit card (kcc)": "The Kisan Credit Card (KCC) loan limit has been increased from ₹3 lakh to ₹5 lakh under the Modified Interest Subvention Scheme.",
+            "what measures have been taken for medical education": "The government will add 10,000 new medical seats in 2025 as part of a plan to add 75,000 seats in 5 years.",
+            "how does budget 2025 support the fisheries sector": "A marine sector development plan focuses on sustainable fishing in Andaman, Nicobar, and Lakshadweep, and provides policy support for deep-sea fishing.",
+            "what support is provided to women entrepreneurs": "A new scheme will provide loans up to ₹2 crore for 5 lakh first-time women, SC, and ST entrepreneurs over the next 5 years."
+        };
+
+        // Function to find the closest matching question
+        function findClosestQuestion(userInput) {
+            let closestQuestion = "";
+            let highestScore = 0;
+            for (const question in qaPairs) {
+                const score = calculateSimilarity(userInput.toLowerCase(), question.toLowerCase());
+                if (score > highestScore) {
+                    highestScore = score;
+                    closestQuestion = question;
+                }
+            }
+            return highestScore >= 70 ? closestQuestion : null;
+        }
+
+        // Simple similarity calculation (for demonstration purposes)
+        function calculateSimilarity(input, question) {
+            const inputWords = input.split(" ");
+            const questionWords = question.split(" ");
+            const matchingWords = inputWords.filter(word => questionWords.includes(word));
+            return (matchingWords.length / questionWords.length) * 100;
+        }
+
+        // Function to send a message
+        function sendMessage() {
+            const userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            // Display user's message
+            const chatBody = document.getElementById("chat-body");
+            const userMessage = document.createElement("div");
+            userMessage.className = "message user";
+            userMessage.innerHTML = `<p>${userInput}</p>`;
+            chatBody.appendChild(userMessage);
+
+            // Clear input
+            document.getElementById("user-input").value = "";
+
+            // Find the closest question and get the answer
+            const closestQuestion = findClosestQuestion(userInput);
+            const answer = closestQuestion ? qaPairs[closestQuestion] : "I'm sorry, I didn't understand that. Can you please rephrase your question?";
+
+            // Display bot's response
+            setTimeout(() => {
+                const botMessage = document.createElement("div");
+                botMessage.className = "message bot";
+                botMessage.innerHTML = `<p>${answer}</p>`;
+                chatBody.appendChild(botMessage);
+                chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the bottom
+            }, 500);
+        }
+
+        // Allow pressing Enter to send a message
+        document.getElementById("user-input").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
